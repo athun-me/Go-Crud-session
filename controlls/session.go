@@ -64,3 +64,13 @@ func CheckAdmin(c *gin.Context) {
 		return
 	}
 }
+
+func LoginUserChecking(c *gin.Context) {
+	session := sessions.Default(c)
+	if session.Get("userId") != nil {
+		c.Redirect(http.StatusMovedPermanently, "/home")
+		return
+	} else {
+		c.Next()
+	}
+}

@@ -32,7 +32,7 @@ func main() {
 	r.POST("/login", controlls.UserLogin)
 
 	r.POST("/logout", controlls.DeleteSession)
-	r.GET("/login", controlls.Loginpage)
+	r.GET("/login", controlls.LoginUserChecking, controlls.Loginpage)
 	r.GET("/admin", controlls.CheckAdmin, controlls.Adminpage)
 	r.GET("/signup", controlls.SignUpPage)
 	r.GET("/home", controlls.CheckSession, controlls.HomePage)
