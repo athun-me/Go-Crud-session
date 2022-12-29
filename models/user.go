@@ -8,6 +8,7 @@ type User struct {
 	gorm.Model
 	Uname    string `gorm:"embedded"`
 	Password string
-	Sub      string
 	Admin    bool
+	Age      int
+	FullName string
 }

@@ -29,13 +29,14 @@ func main() {
 	// }
 
 	r.POST("/signup", controlls.UserSignUP)
-	r.POST("/login", controlls.HomePage)
-	r.POST("/logout", controlls.DeleteSession)
+	r.POST("/login", controlls.UserLogin)
 
+	r.POST("/logout", controlls.DeleteSession)
 	r.GET("/login", controlls.Loginpage)
-	r.GET("/admin", controlls.Adminpage)
+	r.GET("/admin", controlls.CheckAdmin, controlls.Adminpage)
 	r.GET("/signup", controlls.SignUpPage)
-	r.GET("/home", controlls.HomePage)
+	r.GET("/home", controlls.CheckSession, controlls.HomePage)
+	r.POST("/delete", controlls.DeleteUser)
 
 	r.Run(":4000")
 }

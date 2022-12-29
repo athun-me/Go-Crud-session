@@ -2,8 +2,11 @@ package controlls
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/athunlal/config"
+	"github.com/athunlal/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +25,6 @@ func CheckSession(c *gin.Context) {
 	session := sessions.Default(c)
 	if session.Get("userId") != nil {
 		fmt.Println(session.Get("userId"))
-		c.Redirect(http.StatusMovedPermanently, "/home")
 		c.Next()
 	} else {
 		c.Redirect(http.StatusMovedPermanently, "/login")
@@ -33,7 +35,32 @@ func CheckSession(c *gin.Context) {
 func DeleteSession(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
-	session.Delete("userId")
-	session.Save()
+	session.Options(sessions.Options{MaxAge: -1})
+	if session.Save() != nil {
+		log.Fatal("Not deleted session")
+	}
+
 	c.Redirect(http.StatusMovedPermanently, "/login")
+}
+
+func CheckAdmin(c *gin.Context) {
+	session := sessions.Default(c)
+	if session.Get("userId") != nil {
+		fmt.Println(session.Get("userId"))
+		var user models.User
+		result := config.DB.First(&user, "ID = ?", session.Get("userId"))
+		if result.Error != nil {
+			c.Redirect(http.StatusMovedPermanently, "/login")
+			return
+		}
+		if user.Admin == true {
+			c.Next()
+			return
+		}
+		c.Redirect(http.StatusMovedPermanently, "/login")
+		return
+	} else {
+		c.Redirect(http.StatusMovedPermanently, "/login")
+		return
+	}
 }
