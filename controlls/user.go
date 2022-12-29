@@ -66,7 +66,7 @@ func HomePage(c *gin.Context) {
 }
 
 func DeletUser(c *gin.Context){
-	
+
 }
 
 func Adminpage(c *gin.Context) {
